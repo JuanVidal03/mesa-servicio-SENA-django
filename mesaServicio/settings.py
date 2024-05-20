@@ -56,7 +56,7 @@ ROOT_URLCONF = 'mesaServicio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['./appMesaServicio/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,3 +127,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# agregando los valores del modelo al daminpanel de Django
+AUTH_USER_MODEL = 'appMesaServicio.Usuario'
+
+# para guardar imagenes
+import os
+STATIC_URL = os.path.join(BASE_DIR, '/static/')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
