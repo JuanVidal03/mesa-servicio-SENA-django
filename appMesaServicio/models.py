@@ -30,7 +30,7 @@ class Usuario(AbstractUser):
     frechaActualizacion = models.DateTimeField(auto_now=True)
     
     def __str__(self) -> str:
-        return self.first_name
+        return self.username
 
 
 # solicitud a mesa de ayuda
@@ -93,5 +93,5 @@ class SolucionCaso(models.Model):
 
 # solucion tipo caso procedimiento
 class SolucionCasoTipoProcedimientos(models.Model):
-    solSolucionCaso = models.ForeignKey(SolucionCaso, on_delete=models.PROTECT)
-    solTipoProcedimiento = models.ForeignKey(TipoProcedimiento, on_delete=models.PROTECT)
+    solucionCaso = models.ForeignKey(SolucionCaso, on_delete=models.PROTECT)
+    TipoProcedimiento = models.ForeignKey(TipoProcedimiento, on_delete=models.PROTECT)
