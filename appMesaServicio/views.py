@@ -6,6 +6,12 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 # menjar errores en ls db
 from django.db import Error, transaction
+# para configiracion de correos
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
+import threading
+from smtplib import SMTPException
 
 
 # vista incial
@@ -116,8 +122,24 @@ def registro_solicitud(request):
                 tecnicoAsignado = caso_user
             )
             caso.save()
+            
+            # enviar correos de confirmacion
+            asunto = 'Registro Solicitud - Mesa de Servicio'
+            mensajeCorreo = f'Cordial saludo, <b>{user.first_name} {user.last_name}</b>, nos permitimos \
+                informarle que su solicitud fue registrada en nuestro sistema con el número de caso \
+                <b>{codigo_caso}</b>. <br><br> Su caso será gestionado en el menor tiempo posible, \
+                según los acuerdos de solución establecidos para la Mesa de Servicios del CTPI-CAUCA.\
+                <br><br>Lo invitamos a ingresar a nuestro sistema en la siguiente url:\
+                http://mesadeservicioctpicauca.sena.edu.co.'
+            # crear el hilo para el envío del correo
+            thread = threading.Thread(
+                target=enviarCorreo, args=(asunto, mensajeCorreo, [user.email])
+            )
+            # ejecutar el hilo
+            thread.start()
 
-            return render(request, 'empleado/solicitud.html');        
+            return render(request, 'empleado/solicitud.html'); 
+              
     # en caso de que hay algun error
     except Error as error:
         transaction.rollback()
@@ -125,3 +147,24 @@ def registro_solicitud(request):
         print(error)
         mensaje = error;
         return render(request, 'empleado/solicitud.html', {"message": mensaje})
+    
+    
+    
+    
+    
+    
+def enviarCorreo(asunto=None, mensaje=None, destinatario=None, archivo=None):
+    remitente = settings.EMAIL_HOST_USER
+    template = get_template('enviarCorreo.html')
+    contenido = template.render({
+        'mensaje': mensaje,
+    })
+    try:
+        correo = EmailMultiAlternatives(
+            asunto, mensaje, remitente, destinatario)
+        correo.attach_alternative(contenido, 'text/html')
+        if archivo != None:
+            correo.attach_file(archivo)
+        correo.send(fail_silently=True)
+    except SMTPException as error:
+        print(error)

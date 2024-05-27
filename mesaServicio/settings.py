@@ -136,3 +136,10 @@ import os
 STATIC_URL = os.path.join(BASE_DIR, '/static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# configuracion de correos
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'juanmvg2003@gmail.com'
+EMAIL_PASSWORD = 'mkvjiznmrunsmuca'
+EMAIL_PORT = 587
+EMAIL_USE_UTILS = True
