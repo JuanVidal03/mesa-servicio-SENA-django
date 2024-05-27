@@ -13,6 +13,8 @@
         <div>
             {% block header %}
             {% endblock header %}
+            {% block menu %}
+            {% endblock menu %}
         </div>
         <div>
             {% block content %}
@@ -20,6 +22,7 @@
         </div>
         <div>
             {% block footer %}
+                {% include "./footer.html" %}
             {% endblock footer %}
         </div>
     </div>

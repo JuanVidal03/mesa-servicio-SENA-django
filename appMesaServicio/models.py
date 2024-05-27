@@ -58,7 +58,7 @@ class Caso(models.Model):
     solicitudCaso = models.ForeignKey(Solicitud, on_delete=models.PROTECT)
     codigo = models.CharField(max_length=10, unique=True)
     tecnicoAsignado = models.ForeignKey(Usuario, on_delete=models.PROTECT)
-    estado = models.CharField(choices=tipos_estado, max_length=30)
+    estado = models.CharField(choices=tipos_estado, max_length=30, default='Solicitada')
     
     def __str__(self)->str:
         return self.codigo
